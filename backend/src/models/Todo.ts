@@ -1,4 +1,4 @@
-import { Todo as TodoType } from "../@types/todo.types";
+import { Todo as TodoType, TodoUpdateInput } from "../@types/todo.types";
 
 /**
  * Dummy Model, meant to replicate common model behavior from common ORMs.
@@ -53,10 +53,7 @@ export default class Todo {
    * @param updates An object containing the fields to update (excluding 'id' and 'createdAt').
    * @returns The updated todo if found, otherwise undefined.
    */
-  static update(
-    id: string,
-    updates: Partial<Omit<TodoType, "id" | "createdAt">> // Exclude id and createdAt, then make everything else optional
-  ): TodoType | undefined {
+  static update(id: string, updates: TodoUpdateInput): TodoType | undefined {
     const todo = this.getById(id);
 
     if (todo) {
@@ -70,18 +67,19 @@ export default class Todo {
    * Permanently deletes a todo.
    *
    * @param id The ID of the todo to be deleted.
-   * @returns True if successful, false if todo not found.
+   * @returns The deleted todo if found, otherwise undefined.
    */
-  static delete(id: string): boolean {
+  static delete(id: string): TodoType | undefined {
     const index = this.todos.findIndex((todo) => todo.id === id);
+    const todo = this.todos[index];
 
     // If not found
     if (index === -1) {
-      return false;
+      return undefined;
     }
 
     // Delete
     this.todos.splice(index, 1);
-    return true;
+    return todo;
   }
 }
