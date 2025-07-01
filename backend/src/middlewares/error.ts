@@ -6,7 +6,13 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  // TODO
+  // Default status code to 500 if not provided
+  let statusCode: number = res.statusCode ? res.statusCode : 500;
+
+  res.status(statusCode).json({
+    message: err.message,
+    stack: process.env.NODE_ENV === "production" ? null : err.stack, // Hide stack at production
+  });
 };
 
 export default errorHandler;
