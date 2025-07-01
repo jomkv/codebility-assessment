@@ -5,6 +5,7 @@ import { Todo as TodoType } from "../@types/todo.types";
  * Stores todos in memory for demonstration and testing purposes.
  */
 export default class Todo {
+  private static index: number = 1;
   private static todos: TodoType[] = [];
 
   /**
@@ -34,12 +35,13 @@ export default class Todo {
    */
   static create(title: string): TodoType {
     const newTodo: TodoType = {
-      id: String(this.todos.length + 2), // Auto-increment ID, starts at 1 instead of 0
+      id: String(this.index), // Auto-increment ID, starts at 1 instead of 0
       title,
       completed: false,
       createdAt: new Date(),
     };
 
+    this.index++;
     this.todos.push(newTodo);
     return newTodo;
   }
